@@ -7,12 +7,15 @@ from qframelesswindow import *
 
 
 class PhotoCard(ElevatedCardWidget):
-    """ 大图片 card """
+    """
+    大图片卡片
+    """
 
-    def __init__(self, iconPath: str, name: str = "名称", parent=None):
+    def __init__(self, icon: str, name: str = "名称", parent=None):
         super().__init__(parent)
-        self.iconWidget = ImageLabel(iconPath, self)
+        self.iconWidget = ImageLabel(icon, self)
         self.label = CaptionLabel(name, self)
+        self.label.setStyleSheet("QLabel {background-color: rgba(0,0,0,0); border: none;}")
 
         self.iconWidget.scaledToHeight(68)
 
@@ -21,10 +24,18 @@ class PhotoCard(ElevatedCardWidget):
         self.vBoxLayout.addStretch(1)
         self.vBoxLayout.addWidget(self.iconWidget, 0, Qt.AlignCenter)
         self.vBoxLayout.addStretch(1)
-        self.vBoxLayout.addWidget(
-            self.label, 0, Qt.AlignHCenter | Qt.AlignBottom)
+        self.vBoxLayout.addWidget(self.label, 0, Qt.AlignHCenter | Qt.AlignBottom)
 
         self.setFixedSize(168, 176)
+
+    def mousePressEvent(self, event):
+        self.clickedFunction()
+
+    def connect(self, functions):
+        self.clickedFunction = functions
+
+    def clickedFunction(self):
+        pass
 
 
 class GrayCard(QWidget):
@@ -145,20 +156,14 @@ class MainPage(ScrollArea):
         self.grayCard1.addWidget(self.lineEdit)
         self.grayCard1.addWidget(self.pushButton, Qt.AlignRight)
 
-
         self.card1 = PhotoCard("D:\编程\program\Windows\img\logo.png", "zb小程序", self)
-
+        self.card1.connect(lambda: print("123"))
 
         self.grayCard2 = GrayCard("信息", self.view)
         self.grayCard2.addWidget(self.card1)
 
-
         self.vBoxLayout.addWidget(self.grayCard1)
         self.vBoxLayout.addWidget(self.grayCard2)
-
-
-
-
 
 
 class Window(FluentWindow):
